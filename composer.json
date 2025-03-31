@@ -1,0 +1,15 @@
+{
+  "name": "tourze/workerman-stream-http",
+  "description": "Workerman的另一个HTTP协议实现",
+  "license": "MIT",
+  "require": {
+    "php": "^8.1",
+    "nyholm/psr7": "^1.8.2",
+    "workerman/workerman": "^5.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tourze\\Workerman\\StreamHTTP\\": "src"
+    }
+  }
+}
