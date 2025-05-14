@@ -1,1 +1,11 @@
+var/
+vendor/
+.idea/
+.phpunit.cache/
+composer.lock
+.php-cs-fixer.cache
+.phpunit.result.cache
+phpunit.xml
 workerman.log
+*.cache
+*.log
