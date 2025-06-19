@@ -8,7 +8,6 @@ use Psr\Http\Message\ResponseInterface;
 use Tourze\Workerman\StreamHTTP\Context\HttpContext;
 use Tourze\Workerman\StreamHTTP\Enum\HttpPhase;
 use Tourze\Workerman\StreamHTTP\Exception\HttpProtocolException;
-use Tourze\Workerman\StreamHTTP\Exception\InvalidRequestException;
 use Tourze\Workerman\StreamHTTP\Handler\BodyHandler;
 use Tourze\Workerman\StreamHTTP\Handler\HeadersHandler;
 use Tourze\Workerman\StreamHTTP\Handler\RequestLineHandler;
@@ -51,9 +50,6 @@ class HttpProtocol implements ProtocolInterface
 
     public static function input(string $buffer, ConnectionInterface $connection): int
     {
-        if (!is_string($buffer)) {
-            throw new InvalidRequestException('Invalid request buffer type');
-        }
 
         if (strlen($buffer) < 2) {
             return 0;
@@ -125,9 +121,6 @@ class HttpProtocol implements ProtocolInterface
 
     public static function decode(string $buffer, ConnectionInterface $connection): Request
     {
-        if (!is_string($buffer)) {
-            throw new InvalidRequestException('Invalid request buffer type');
-        }
 
         $ctx = self::getContext($connection);
 
@@ -171,7 +164,7 @@ class HttpProtocol implements ProtocolInterface
                 $body = (string)$data->getBody();
 
                 // 设置基础响应头
-                $data = $data->withHeader('Content-Length', strlen($body));
+                $data = $data->withHeader('Content-Length', (string)strlen($body));
 
                 // 设置连接状态
                 if ($ctx->shouldClose) {

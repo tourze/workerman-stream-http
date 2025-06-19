@@ -96,7 +96,7 @@ class BodyHandler implements RequestHandlerInterface
     public function process(string $buffer, HttpContext $ctx): Request
     {
         $request = $ctx->request;
-        if (!$request) {
+        if ($request === null) {
             throw new \RuntimeException('No request in context');
         }
 
@@ -106,7 +106,7 @@ class BodyHandler implements RequestHandlerInterface
         }
 
         // 检查传输编码
-        $transferEncoding = strtolower($request->getHeaderLine('Transfer-Encoding') ?? '');
+        $transferEncoding = strtolower($request->getHeaderLine('Transfer-Encoding'));
         if ($transferEncoding === 'chunked') {
             $body = $this->decodeChunkedBody($buffer);
         } else {
@@ -156,7 +156,7 @@ class BodyHandler implements RequestHandlerInterface
     private function shouldSkipBody(): bool
     {
         $request = $this->getCurrentRequest();
-        if (!$request) {
+        if ($request === null) {
             return true;
         }
 
