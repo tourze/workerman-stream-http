@@ -82,7 +82,7 @@ class HttpProtocolTest extends TestCase
      */
     public function testEncodeInvalidResponseType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\Tourze\Workerman\StreamHTTP\Exception\InvalidResponseException::class);
 
         // 尝试编码一个无效的响应类型（整数）
         HttpProtocol::encode(123, $this->connection);

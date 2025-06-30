@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Tourze\Workerman\StreamHTTP\Context\HttpContext;
 use Tourze\Workerman\StreamHTTP\Enum\HttpPhase;
 use Tourze\Workerman\StreamHTTP\Exception\HttpProtocolException;
+use Tourze\Workerman\StreamHTTP\Exception\InvalidResponseException;
 use Tourze\Workerman\StreamHTTP\Handler\BodyHandler;
 use Tourze\Workerman\StreamHTTP\Handler\HeadersHandler;
 use Tourze\Workerman\StreamHTTP\Handler\RequestLineHandler;
@@ -211,7 +212,7 @@ class HttpProtocol implements ProtocolInterface
                 return $response;
             }
             else {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidResponseException(sprintf(
                     'Invalid response type. Expected PSR-7 ResponseInterface or string, got %s',
                     is_object($data) ? get_class($data) : gettype($data)
                 ));

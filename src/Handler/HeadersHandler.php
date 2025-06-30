@@ -38,7 +38,14 @@ class HeadersHandler implements RequestHandlerInterface
             if (empty($line)) continue;
             if (str_contains($line, ':')) {
                 list($name, $value) = explode(':', $line, 2);
-                $request = $request->withHeader(trim($name), trim($value));
+                $name = trim($name);
+                $value = trim($value);
+                $request = $request->withHeader($name, $value);
+                
+                // 检查 Connection 头部来决定是否应该关闭连接
+                if (strtolower($name) === 'connection') {
+                    $ctx->shouldClose = strtolower($value) === 'close';
+                }
             }
         }
 

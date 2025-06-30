@@ -5,6 +5,7 @@ namespace Tourze\Workerman\StreamHTTP\Handler;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Request;
 use Tourze\Workerman\StreamHTTP\Context\HttpContext;
+use Tourze\Workerman\StreamHTTP\Exception\ContextException;
 use Tourze\Workerman\StreamHTTP\Protocol\HttpProtocol;
 
 class BodyHandler implements RequestHandlerInterface
@@ -97,7 +98,7 @@ class BodyHandler implements RequestHandlerInterface
     {
         $request = $ctx->request;
         if ($request === null) {
-            throw new \RuntimeException('No request in context');
+            throw new ContextException('No request in context');
         }
 
         // 如果是GET/HEAD/DELETE/OPTIONS请求，不需要处理body

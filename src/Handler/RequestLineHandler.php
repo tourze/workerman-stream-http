@@ -6,6 +6,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Request;
 use Tourze\Workerman\StreamHTTP\Context\HttpContext;
 use Tourze\Workerman\StreamHTTP\Enum\HttpPhase;
+use Tourze\Workerman\StreamHTTP\Exception\InvalidRequestException;
 use Tourze\Workerman\StreamHTTP\Protocol\HttpProtocol;
 
 class RequestLineHandler implements RequestHandlerInterface
@@ -54,12 +55,12 @@ class RequestLineHandler implements RequestHandlerInterface
         $line = substr($buffer, 0, strpos($buffer, HttpProtocol::CRLF));
 
         if (!preg_match('/^([A-Z]+)\s+(.+)\s+HTTP\/(\d\.\d)$/i', $line, $matches)) {
-            throw new \RuntimeException('Invalid request line: ' . $line);
+            throw new InvalidRequestException('Invalid request line: ' . $line);
         }
 
         $method = strtoupper($matches[1]);
         if (!in_array($method, self::$allowedMethods, true)) {
-            throw new \RuntimeException(sprintf('Unsupported HTTP method: %s', $method));
+            throw new InvalidRequestException(sprintf('Unsupported HTTP method: %s', $method));
         }
 
         $uri = $this->psr17Factory->createUri($matches[2]);
