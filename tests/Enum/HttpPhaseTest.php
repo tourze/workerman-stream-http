@@ -1,11 +1,18 @@
 <?php
 
-namespace Tourze\Workerman\StreamHTTP\Tests\Unit\Enum;
+declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
+namespace Tourze\Workerman\StreamHTTP\Tests\Enum;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 use Tourze\Workerman\StreamHTTP\Enum\HttpPhase;
 
-class HttpPhaseTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(HttpPhase::class)]
+final class HttpPhaseTest extends AbstractEnumTestCase
 {
     public function testHttpPhaseValues(): void
     {
@@ -21,30 +28,17 @@ class HttpPhaseTest extends TestCase
         $this->assertSame('Body', HttpPhase::BODY->getLabel());
     }
 
-    public function testToSelectItem(): void
-    {
-        $item = HttpPhase::REQUEST_LINE->toSelectItem();
-        $this->assertSame('Request Line', $item['label']);
-        $this->assertSame('Request Line', $item['text']);
-        $this->assertSame('Request Line', $item['name']);
-        
-        $item = HttpPhase::HEADERS->toSelectItem();
-        $this->assertSame('Headers', $item['label']);
-        $this->assertSame('Headers', $item['text']);
-        $this->assertSame('Headers', $item['name']);
-    }
-
     public function testToArray(): void
     {
-        $this->assertSame(['value' => null, 'label' => 'Request Line'], HttpPhase::REQUEST_LINE->toArray());
-        $this->assertSame(['value' => null, 'label' => 'Headers'], HttpPhase::HEADERS->toArray());
-        $this->assertSame(['value' => null, 'label' => 'Body'], HttpPhase::BODY->toArray());
+        $this->assertSame(['value' => 'request_line', 'label' => 'Request Line'], HttpPhase::REQUEST_LINE->toArray());
+        $this->assertSame(['value' => 'headers', 'label' => 'Headers'], HttpPhase::HEADERS->toArray());
+        $this->assertSame(['value' => 'body', 'label' => 'Body'], HttpPhase::BODY->toArray());
     }
 
     public function testGenOptions(): void
     {
         $options = HttpPhase::genOptions();
-        
+
         $this->assertCount(3, $options);
         $this->assertSame('Request Line', $options[0]['label']);
         $this->assertSame('Headers', $options[1]['label']);

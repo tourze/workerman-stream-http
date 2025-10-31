@@ -1,16 +1,24 @@
 <?php
 
-namespace Tourze\Workerman\StreamHTTP\Tests\Integration;
+declare(strict_types=1);
+
+namespace Tourze\Workerman\StreamHTTP\Tests;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Tourze\Workerman\StreamHTTP\Protocol\HttpProtocol;
 use Workerman\Connection\TcpConnection;
 
-class HttpRequestTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(HttpProtocol::class)]
+final class HttpRequestTest extends TestCase
 {
     /**
-     * @var TcpConnection&\PHPUnit\Framework\MockObject\MockObject
+     * @var TcpConnection&MockObject
      */
     private $connection;
 
@@ -87,7 +95,7 @@ class HttpRequestTest extends TestCase
         $request = HttpProtocol::decode($body, $this->connection);
 
         // 验证请求体
-        $this->assertEquals($body, (string)$request->getBody());
+        $this->assertEquals($body, (string) $request->getBody());
         $this->assertEquals('application/json', $request->getHeaderLine('Content-Type'));
 
         // 创建响应

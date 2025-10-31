@@ -1,16 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\Workerman\StreamHTTP\Tests\Handler;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\Workerman\StreamHTTP\Context\HttpContext;
 use Tourze\Workerman\StreamHTTP\Enum\HttpPhase;
 use Tourze\Workerman\StreamHTTP\Handler\RequestLineHandler;
 
-class RequestLineHandlerTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(RequestLineHandler::class)]
+final class RequestLineHandlerTest extends TestCase
 {
     private RequestLineHandler $handler;
+
     private HttpContext $context;
 
     protected function setUp(): void
@@ -74,7 +82,8 @@ class RequestLineHandlerTest extends TestCase
         // 应该返回第一个CRLF的位置 + CRLF长度
         $result = $this->handler->processInput($buffer);
 
-        $expectedLength = strpos($buffer, "\r\n") + 2;
+        $crlfPos = strpos($buffer, "\r\n");
+        $expectedLength = (false !== $crlfPos ? $crlfPos : 0) + 2;
         $this->assertEquals($expectedLength, $result);
     }
 
@@ -83,7 +92,7 @@ class RequestLineHandlerTest extends TestCase
      */
     public function testProcessInputIncomplete(): void
     {
-        $buffer = "GET /path HTTP/1.1";
+        $buffer = 'GET /path HTTP/1.1';
 
         // 应该返回0，表示需要更多数据
         $result = $this->handler->processInput($buffer);
@@ -97,7 +106,7 @@ class RequestLineHandlerTest extends TestCase
     public function testProcessInputTooLong(): void
     {
         // 创建一个超过8192字节的长请求行
-        $buffer = "GET /" . str_repeat('a', 8200) . " HTTP/1.1";
+        $buffer = 'GET /' . str_repeat('a', 8200) . ' HTTP/1.1';
 
         // 应该返回false，表示错误
         $result = $this->handler->processInput($buffer);

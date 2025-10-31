@@ -1,16 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\Workerman\StreamHTTP\Tests\Protocol;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Tourze\Workerman\StreamHTTP\Exception\InvalidResponseException;
 use Tourze\Workerman\StreamHTTP\Protocol\HttpProtocol;
 use Workerman\Connection\TcpConnection;
 
-class HttpProtocolTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(HttpProtocol::class)]
+final class HttpProtocolTest extends TestCase
 {
     /**
-     * @var TcpConnection&\PHPUnit\Framework\MockObject\MockObject
+     * @var TcpConnection&MockObject
      */
     private $connection;
 
@@ -82,7 +91,7 @@ class HttpProtocolTest extends TestCase
      */
     public function testEncodeInvalidResponseType(): void
     {
-        $this->expectException(\Tourze\Workerman\StreamHTTP\Exception\InvalidResponseException::class);
+        $this->expectException(InvalidResponseException::class);
 
         // 尝试编码一个无效的响应类型（整数）
         HttpProtocol::encode(123, $this->connection);

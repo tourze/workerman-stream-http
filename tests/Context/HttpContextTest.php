@@ -1,18 +1,25 @@
 <?php
 
-namespace Tourze\Workerman\StreamHTTP\Tests\Unit\Context;
+declare(strict_types=1);
+
+namespace Tourze\Workerman\StreamHTTP\Tests\Context;
 
 use Nyholm\Psr7\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\Workerman\StreamHTTP\Context\HttpContext;
 use Tourze\Workerman\StreamHTTP\Enum\HttpPhase;
 
-class HttpContextTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(HttpContext::class)]
+final class HttpContextTest extends TestCase
 {
     public function testContextInitialization(): void
     {
         $context = new HttpContext();
-        
+
         $this->assertSame(HttpPhase::REQUEST_LINE, $context->phase);
         $this->assertNull($context->request);
         $this->assertFalse($context->shouldClose);
@@ -22,10 +29,10 @@ class HttpContextTest extends TestCase
     {
         $context = new HttpContext();
         $request = new Request('GET', '/test');
-        
+
         $context->request = $request;
         $context->phase = HttpPhase::HEADERS;
-        
+
         $this->assertSame($request, $context->request);
         $this->assertSame(HttpPhase::HEADERS, $context->phase);
     }
@@ -34,7 +41,7 @@ class HttpContextTest extends TestCase
     {
         $context = new HttpContext();
         $context->shouldClose = true;
-        
+
         $this->assertTrue($context->shouldClose);
     }
 }
